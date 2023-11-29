@@ -1,10 +1,9 @@
 package org.example;
 
+import java.io.Serializable;
 import java.util.Random;
 
-import static org.example.specialication.ME;
-
-public class Student {
+public class Student implements Serializable {
     private final int numberInGroup;
     private final String secondName;
     private final int course;
@@ -31,8 +30,8 @@ public class Student {
 
     private specialication randomSpecialication() {
         Random ran = new Random();
-        specialication[] specialications = org.example.specialication.values();
-        return specialications[ran.nextInt(specialications.length)];
+        specialication[] specializations = org.example.specialication.values();
+        return specializations[ran.nextInt(specializations.length)];
     }
 
     private String randomSecondName() {

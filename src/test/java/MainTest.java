@@ -1,4 +1,4 @@
-import org.example.Main;
+import org.example.WorkClass;
 import org.example.Student;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +10,7 @@ public class MainTest {
         students[0] = new Student();
         students[1] = new Student();
 
-        int goodMarks = Main.searchGoodMarks(students);
+        int goodMarks = WorkClass.searchGoodMarksPhys(students);
         assertTrue(goodMarks >= 1 && goodMarks <= 5);
     }
 }

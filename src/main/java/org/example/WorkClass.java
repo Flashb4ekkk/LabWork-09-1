@@ -1,17 +1,37 @@
 package org.example;
 
+import java.io.*;
 import java.util.Scanner;
 
-public class Main {
+public class WorkClass {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
+
+        System.out.print("Enter file name: ");
+        String fileName = scan.next();
+
         System.out.print("Enter number of students: ");
         int n = scan.nextInt();
         Student[] students = new Student[n];
         initArray(students);
         printArray(students);
 
-        System.out.println("number of \"satisfactory\" marks: " + searchGoodMarks(students));
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName + ".bin"))) {
+            out.writeObject(students);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName + ".bin"))) {
+            Student[] readStudents = (Student[]) in.readObject();
+            printArray(readStudents);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("number of \"satisfactory\" marks from physics: " + searchGoodMarksPhys(students));
+        System.out.println("number of \"satisfactory\" marks from math: " + searchGoodMarksMath(students));
+        System.out.println("number of \"satisfactory\" marks from info:  " + searchGoodMarksInfo(students));
         System.out.println("student which get 4 & 5 marks: " + String.join(", ", searchSecondNameOfStudents(students)));
     }
 
@@ -34,20 +54,34 @@ public class Main {
         }
     }
 
-    public static int searchGoodMarks(Student[] ar){
-        int goodMark = 0;
+    public static int searchGoodMarksPhys(Student[] ar){
+        int goodMarks = 0, targetMark = 3;
         for (Student student : ar) {
-            if (student.getMarksPhysics() >= 3) {
-                goodMark++;
-            }
-            if (student.getMarksMath() >= 3) {
-                goodMark++;
-            }
-            if (student.getMarksInfo() >= 3) {
-                goodMark++;
+            if (student.getMarksPhysics() >= targetMark) {
+                goodMarks++;
             }
         }
-        return goodMark;
+        return goodMarks;
+    }
+
+    public static int searchGoodMarksMath(Student[] ar){
+        int goodMarks = 0, targetMark = 3;
+        for (Student student : ar) {
+            if (student.getMarksMath() >= targetMark) {
+                goodMarks++;
+            }
+        }
+        return goodMarks;
+    }
+
+    public static int searchGoodMarksInfo(Student[] ar){
+        int goodMarks = 0, targetMark = 3;
+        for (Student student : ar) {
+            if (student.getMarksInfo() >= targetMark) {
+                goodMarks++;
+            }
+        }
+        return goodMarks;
     }
 
     public static void initArray(Student[] ar){
@@ -67,3 +101,4 @@ public class Main {
         System.out.println("----------------------------------------------------------------------------------------");
     }
 }
+
